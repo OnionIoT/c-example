@@ -100,48 +100,47 @@ int main(int argc, char* argv[])
 	int gpio;
 	int value;
 
-	if(argc > 1)
-	{
-		gpio=atoi(argv[1]);
-
-		// export the gpio
-		printf("> exporting gpio\n");
-		status = toggleGpio(gpio, 1);
-		printf("     status: %d\n", status);
-
-
-		// set the direction to input
-		printf("> setting to input\n");
-		status |= setInputDir(gpio);
-		printf("     status: %d\n", status);
-
-		// read the gpio 20 times
-		for (i = 0; i < 20; i++) 
-		{ 
-			// read the gpio
-			status = readInput(gpio, &value);
-
-			if (status < 0) {
-				printf("ERROR: reading GPIO%d input\n", gpio);
-			}
-			else {
-				printf("  > Read GPIO%d: value '%d'\n", gpio, value);
-			}
-
-			// pause between each read
-			sleep(1);
-		}
-
-
-
-		// unexport the gpio
-		printf("> unexporting gpio\n");
-		status |= toggleGpio(gpio, 0);
-		printf("     status: %d\n", status);
-		
-		return 0;
+	if (argc < 2) {
+		printf("Usage: gpioRead <gpio>\n\n");
+		printf("Reads the input value of the specified GPIO pin once a second for 20 seconds\n");
+		exit(-1);
 	}
 
-	printf("Need GPIO number to handle.\n");
-	return -1;
+	
+	gpio=atoi(argv[1]);
+
+	// export the gpio
+	printf("> exporting gpio\n");
+	status = toggleGpio(gpio, 1);
+	printf("     status: %d\n", status);
+
+
+	// set the direction to input
+	printf("> setting to input\n");
+	status |= setInputDir(gpio);
+	printf("     status: %d\n", status);
+
+	// read the gpio 20 times
+	for (i = 0; i < 20; i++) 
+	{ 
+		// read the gpio
+		status = readInput(gpio, &value);
+
+		if (status < 0) {
+			printf("ERROR: reading GPIO%d input\n", gpio);
+		}
+		else {
+			printf("  > Read GPIO%d: value '%d'\n", gpio, value);
+		}
+
+		// pause between each read
+		sleep(1);
+	}
+
+	// unexport the gpio
+	printf("> unexporting gpio\n");
+	status |= toggleGpio(gpio, 0);
+	printf("     status: %d\n", status);
+	
+	return 0;
 }
