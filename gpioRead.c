@@ -121,6 +121,7 @@ int main(int argc, char* argv[])
 	printf("     status: %d\n", status);
 
 	// read the gpio 20 times
+	printf("> begin reading GPIO%d\n",gpio);
 	for (i = 0; i < 20; i++) 
 	{ 
 		// read the gpio
